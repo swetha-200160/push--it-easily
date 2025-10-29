@@ -1,1 +1,1 @@
-sd
+sd"test $(date /T)" 
