@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building project...'
-                bat 'C:\ProgramData\Jenkins\.jenkins\workspace\job build'
+                bat "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\job build"
               
             }
         }
@@ -23,9 +23,9 @@ pipeline {
         stage('Copy Build Files') {
             steps {
                 bat """
-                    if not exist "C:\ProgramData\Jenkins\.jenkins\workspace\job build" mkdir "C:\ProgramData\Jenkins\.jenkins\workspace\job build"
-                    copy /Y target\\*.jar "C:\ProgramData\Jenkins\.jenkins\workspace\job build"
-                    copy /Y target\\*.war "C:\ProgramData\Jenkins\.jenkins\workspace\job build"
+                    if not exist "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\job build" mkdir "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\job build"
+                    copy /Y target\\*.jar "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\job build"
+                    copy /Y target\\*.war "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\job build"
                 """
             }
         }
