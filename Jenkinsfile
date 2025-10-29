@@ -15,7 +15,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building project...'
-                bat 'mvn clean package -DskipTests'
+                bat 'C:\build files'
+              
             }
         }
 
