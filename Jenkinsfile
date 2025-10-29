@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'gitrepo', url: 'https://github.com/swetha-200160/push--it-easily.git'
+                git branch: 'main', credentialsId: 'gitrepo/******', url: 'https://github.com/swetha-200160/push--it-easily.git'
             }
         }
 
