@@ -1,36 +1,87 @@
 pipeline {
-  agent any
-  environment { GIT_CRED='gitrepo'; BRANCH='main'; DEPLOY_DIR='C:\\inetpub\\wwwroot\\myapp' }
-  stages {
-    stage('Checkout') {
-      steps {
-        git url: 'https://github.com/swetha-200160/push--it-easily.git', credentialsId: env.GIT_CRED, branch: env.BRANCH
-      }
+
+    agent any
+ 
+    environment {
+
+        BUILD_OUTPUT = "Target_folder"
+
     }
-    stage('Prepare build') {
-      steps {
-        powershell '''
-        if (Test-Path build) { Remove-Item -Recurse -Force build }
-        New-Item -ItemType Directory -Path build | Out-Null
-        Get-ChildItem -Path . -Include *.html,*.htm,*.css,*.js -Recurse | ForEach-Object {
-          $rel = $_.FullName.Substring((Get-Location).Path.Length).TrimStart('\')
-          $dest = Join-Path (Join-Path (Get-Location) 'build') $rel
-          $dird = Split-Path $dest -Parent
-          if (-not (Test-Path $dird)) { New-Item -ItemType Directory -Path $dird | Out-Null }
-          Copy-Item -LiteralPath $_.FullName -Destination $dest -Force
+ 
+    stages {
+
+        stage('Checkout') {
+
+            steps {
+
+                git branch: 'main',
+
+                    credentialsId: 'ID',
+
+                    url: 'Github_URL'
+
+            }
+
         }
-        '''
-      }
+ 
+        stage('Build') {
+
+            steps {
+
+                echo 'Building Java project...'
+
+                // If project uses Maven wrapper
+
+                bat 'mvn clean package -DskipTests'
+
+            }
+
+        }
+ 
+        stage('Copy Build Files') {
+
+            steps {
+
+                script {
+
+                    echo "Copying build files to ${env.BUILD_OUTPUT}"
+
+                    // Adjust target path based on project structure (e.g., target/*.jar)
+
+                    bat """
+
+                    if not exist "${env.BUILD_OUTPUT}" mkdir "${env.BUILD_OUTPUT}"
+
+                    copy /Y target\\*.jar "${env.BUILD_OUTPUT}\\"
+
+                    copy /Y target\\*.war "${env.BUILD_OUTPUT}\\"
+
+                    """
+
+                }
+
+            }
+
+        }
+
     }
-    stage('Package') {
-      steps {
-        powershell 'Compress-Archive -Path build\\* -DestinationPath build.zip -Force'
-        archiveArtifacts artifacts: 'build.zip', fingerprint: true
-      }
+ 
+    post {
+
+        success {
+
+            echo 'Build completed successfully and files copied to Targetfolder'
+
+        }
+
+        failure {
+
+            echo 'Build failed!'
+
+        }
+
     }
-    stage('Deploy') {
-      when { expression { return env.DEPLOY_DIR && env.DEPLOY_DIR.trim() != '' } }
-      steps { powershell "if (-not (Test-Path '${env.DEPLOY_DIR}')) { New-Item -ItemType Directory -Path '${env.DEPLOY_DIR}' | Out-Null } ; robocopy build '${env.DEPLOY_DIR}' /MIR /NFL /NDL /NJH /NJS" }
-    }
-  }
+
 }
+
+ 
