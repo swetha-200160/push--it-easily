@@ -16,9 +16,9 @@ pipeline {
 
                 git branch: 'main',
 
-                    credentialsId: 'ID',
+                    credentialsId: 'gitrepo/******',
 
-                    url: 'Github_URL'
+                    url: 'https://github.com/swetha-200160/push--it-easily.git/'
 
             }
 
