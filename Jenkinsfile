@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        BUILD_OUTPUT = "Target_folder"
+        BUILD_OUTPUT = "build files"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'ID', url: 'https://github.com/yourname/yourrepo.git'
+                git branch: 'main', credentialsId: 'gitrepo', url: 'https://github.com/swetha-200160/push--it-easily.git'
             }
         }
 
@@ -22,9 +22,9 @@ pipeline {
         stage('Copy Build Files') {
             steps {
                 bat """
-                    if not exist "${env.BUILD_OUTPUT}" mkdir "${env.BUILD_OUTPUT}"
-                    copy /Y target\\*.jar "${env.BUILD_OUTPUT}\\"
-                    copy /Y target\\*.war "${env.BUILD_OUTPUT}\\"
+                    if not exist "C:\build files" mkdir "C:\build files"
+                    copy /Y target\\*.jar "C:\build files\\"
+                    copy /Y target\\*.war "C:\build files\\"
                 """
             }
         }
