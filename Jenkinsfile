@@ -4,7 +4,7 @@ pipeline {
  
     environment {
 
-        BUILD_OUTPUT = "test_job"
+        BUILD_OUTPUT = "auto build"
 
     }
  
@@ -44,17 +44,17 @@ pipeline {
 
                 script {
 
-                    echo "Copying build files to ${env.test_job}"
+                    echo "Copying build files to ${env.auto build}"
 
                     // Adjust target path based on project structure (e.g., target/*.jar)
 
                     bat """
 
-                    if not exist "${env.test_job}" mkdir "${env.test_job}"
+                    if not exist "${env.auto build}" mkdir "${env.auto build}"
 
-                    copy /Y target\\*.jar "C:\\ProgramData\\Jenkins\\test_job\\"
+                    copy /Y target\\*.jar "C:\ProgramData\Jenkins\.jenkins\workspace\auto build"
 
-                    copy /Y target\\*.war "C:\\ProgramData\\Jenkins\\test_job\\"
+                    copy /Y target\\*.war "C:\ProgramData\Jenkins\.jenkins\workspace\auto build"
 
                     """
 
