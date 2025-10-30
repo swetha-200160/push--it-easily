@@ -44,7 +44,7 @@ pipeline {
 
                 script {
 
-                    echo "Copying build files to ${env.push--it-easily}"
+                    echo "Copying build files to ${env.test_job}"
 
                     // Adjust target path based on project structure (e.g., target/*.jar)
 
