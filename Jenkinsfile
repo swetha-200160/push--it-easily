@@ -50,7 +50,7 @@ pipeline {
 
                     bat """
 
-                    if not exist "${env.BUILD_OUTPUT}" mkdir "${env.BUILD_OUTPUT}"
+                    if not exist "${env.BUILD_OUTPUT}" mkdir "C://ProgramData/Jenkins/test_job\\"
 
                     copy /Y target\\*.jar "C://ProgramData/Jenkins/test_job\\"
 
