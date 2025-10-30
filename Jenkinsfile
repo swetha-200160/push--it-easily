@@ -1,65 +1,87 @@
 pipeline {
-  agent any
 
-  // Ensure Jenkins provides Maven (must match the name in Global Tool Configuration)
-  tools {
-    maven 'M3'
-    // optional: jdk 'JDK11'  // if you also configured JDK in Global Tool Config
-  }
+    agent any
+ 
+    environment {
 
-  environment {
-    BUILD_OUTPUT = 'C:\\ProgramData\\Jenkins\\test_job'
-  }
+        BUILD_OUTPUT = "test_job"
 
-  stages {
-    stage('Checkout') {
-      steps {
-        git branch: 'main',
-            credentialsId: 'gitrepo',
-            url: 'https://github.com/swetha-200160/push--it-easily.git'
-      }
     }
+ 
+    stages {
 
-    stage('Verify tools') {
-      steps {
-        // Print path and verify mvn is available
-        bat """
-        echo ==== PATH ====
-        echo %PATH%
-        echo ==== MAVEN ====
-        mvn -v
-        """
-      }
-    }
+        stage('Checkout') {
 
-    stage('Build') {
-      steps {
-        echo 'Building Java project...'
-        // use Maven in non-interactive mode
-        bat 'mvn -B -DskipTests clean package'
-      }
-    }
+            steps {
 
-    stage('Copy Build Files') {
-      steps {
-        script {
-          echo "Copying build files to ${env.test_job}"
-          bat """
-          if not exist "%test_job%" mkdir "%test_job%"
-          copy /Y target\\*.jar "%test_job%\\"
-          copy /Y target\\*.war "%test_job%\\"
-          """
+                git branch: 'main',
+
+                    credentialsId: 'gitrepo',
+
+                    url: 'https://github.com/swetha-200160/push--it-easily.git'
+
+            }
+
         }
-      }
-    }
-  }
+ 
+        stage('Build') {
 
-  post {
-    success {
-      echo "Build completed successfully and files copied to ${env.test_job}"
+            steps {
+
+                echo 'Building Java project...'
+
+                // If project uses Maven wrapper
+
+                bat 'mvn clean package -DskipTests'
+
+            }
+
+        }
+ 
+        stage('Copy Build Files') {
+
+            steps {
+
+                script {
+
+                    echo "Copying build files to ${env.test_job}"
+
+                    // Adjust target path based on project structure (e.g., target/*.jar)
+
+                    bat """
+
+                    if not exist "${env.BUILD_OUTPUT}" mkdir "${env.BUILD_OUTPUT}"
+
+                    copy /Y target\\*.jar "C://ProgramData/Jenkins/test_job\\"
+
+                    copy /Y target\\*.war "C://ProgramData/Jenkins/test_job\\"
+
+                    """
+
+                }
+
+            }
+
+        }
+
     }
-    failure {
-      echo 'Build failed!'
+ 
+    post {
+
+        success {
+
+            echo 'Build completed successfully and files copied to Targetfolder'
+
+        }
+
+        failure {
+
+            echo 'Build failed!'
+
+        }
+
     }
-  }
+
 }
+
+ 
