@@ -1,87 +1,65 @@
 pipeline {
+  agent any
 
-    agent any
- 
-    environment {
+  // Ensure Jenkins provides Maven (must match the name in Global Tool Configuration)
+  tools {
+    maven 'M3'
+    // optional: jdk 'JDK11'  // if you also configured JDK in Global Tool Config
+  }
 
-        BUILD_OUTPUT = "C://ProgramData/Jenkins/test_job"
+  environment {
+    BUILD_OUTPUT = 'C:\\ProgramData\\Jenkins\\test_job'
+  }
 
-    }
- 
-    stages {
-
-        stage('Checkout') {
-
-            steps {
-
-                git branch: 'main',
-
-                    credentialsId: 'gitrepo',
-
-                    url: 'https://github.com/swetha-200160/push--it-easily.git'
-
-            }
-
-        }
- 
-        stage('Build') {
-
-            steps {
-
-                echo 'Building Java project...'
-
-                // If project uses Maven wrapper
-
-                bat 'mvn clean package -DskipTests'
-
-            }
-
-        }
- 
-        stage('Copy Build Files') {
-
-            steps {
-
-                script {
-
-                    echo "Copying build files to ${env.BUILD_OUTPUT}"
-
-                    // Adjust target path based on project structure (e.g., target/*.jar)
-
-                    bat """
-
-                    if not exist "${env.test_job}" mkdir "${env.test_job}"
-
-                    copy /Y target\\*.jar "C://ProgramData/Jenkins/test_job\\"
-
-                    copy /Y target\\*.war "C://ProgramData/Jenkins/test_job\\"
-
-                    """
-
-                }
-
-            }
-
-        }
-
-    }
- 
-    post {
-
-        success {
-
-            echo 'Build completed successfully and files copied to Targetfolder'
-
-        }
-
-        failure {
-
-            echo 'Build failed!'
-
-        }
-
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'main',
+            credentialsId: 'gitrepo',
+            url: 'https://github.com/swetha-200160/push--it-easily.git'
+      }
     }
 
+    stage('Verify tools') {
+      steps {
+        // Print path and verify mvn is available
+        bat """
+        echo ==== PATH ====
+        echo %PATH%
+        echo ==== MAVEN ====
+        mvn -v
+        """
+      }
+    }
+
+    stage('Build') {
+      steps {
+        echo 'Building Java project...'
+        // use Maven in non-interactive mode
+        bat 'mvn -B -DskipTests clean package'
+      }
+    }
+
+    stage('Copy Build Files') {
+      steps {
+        script {
+          echo "Copying build files to ${env.test_job}"
+          bat """
+          if not exist "%test_job%" mkdir "%test_job%"
+          copy /Y target\\*.jar "%test_job%\\"
+          copy /Y target\\*.war "%test_job%\\"
+          """
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Build completed successfully and files copied to ${env.test_job}"
+    }
+    failure {
+      echo 'Build failed!'
+    }
+  }
 }
-
- 
