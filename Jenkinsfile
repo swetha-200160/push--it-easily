@@ -4,7 +4,7 @@ pipeline {
  
     environment {
 
-        BUILD_OUTPUT = "push--it-easily"
+        BUILD_OUTPUT = "test_job"
 
     }
  
@@ -44,7 +44,7 @@ pipeline {
 
                 script {
 
-                    echo "Copying build files to ${env.push--it-easily}"
+                    echo "Copying build files to ${env.test_job}"
 
                     // Adjust target path based on project structure (e.g., target/*.jar)
 
@@ -52,9 +52,9 @@ pipeline {
 
                     if not exist "${env.test_job}" mkdir "${env.test_job}"
 
-                    copy /Y target\\*.jar "${env.test_job}\\"
+                    copy /Y target\\*.jar "C:\ProgramData\Jenkins\test_job\\"
 
-                    copy /Y target\\*.war "${env.test_job}\\"
+                    copy /Y target\\*.war "C:\ProgramData\Jenkins\test_job\\"
 
                     """
 
