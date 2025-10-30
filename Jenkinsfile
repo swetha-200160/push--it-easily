@@ -1,42 +1,87 @@
 pipeline {
+
     agent any
-
+ 
     environment {
-        BUILD_OUTPUT = "C:\\build_output"
-    }
 
+        BUILD_OUTPUT = "test_job"
+
+    }
+ 
     stages {
+
         stage('Checkout') {
+
             steps {
+
                 git branch: 'main',
+
                     credentialsId: 'gitrepo',
+
                     url: 'https://github.com/swetha-200160/push--it-easily.git'
-            }
-        }
 
+            }
+
+        }
+ 
         stage('Build') {
-            steps {
-                echo 'Running build simulation...'
-                bat 'echo Build successful > output.txt'
-            }
-        }
 
+            steps {
+
+                echo 'Building Java project...'
+
+                // If project uses Maven wrapper
+
+                bat 'mvn clean package -DskipTests'
+
+            }
+
+        }
+ 
         stage('Copy Build Files') {
+
             steps {
-                bat """
-                if not exist "${env.BUILD_OUTPUT}" mkdir "${env.BUILD_OUTPUT}"
-                copy /Y output.txt "${env.BUILD_OUTPUT}\\"
-                """
+
+                script {
+
+                    echo "Copying build files to ${env.BUILD_OUTPUT}"
+
+                    // Adjust target path based on project structure (e.g., target/*.jar)
+
+                    bat """
+
+                    if not exist "C:\\ProgramData\\Jenkins\\test_job" mkdir "C:\\ProgramData\\Jenkins\\test_job\\"
+
+                    copy /Y target\\*.jar "C:\\ProgramData\\Jenkins\\test_job\\"
+
+                    copy /Y target\\*.war "C:\\ProgramData\\Jenkins\\test_job\\"
+
+                    """
+
+                }
+
             }
+
         }
+
+    }
+ 
+    post {
+
+        success {
+
+            echo 'Build completed successfully and files copied to testjob'
+
+        }
+
+        failure {
+
+            echo 'Build failed!'
+
+        }
+
     }
 
-    post {
-        success {
-            echo '✅ Build finished and files copied successfully!'
-        }
-        failure {
-            echo '❌ Build failed!'
-        }
-    }
 }
+
+ 
