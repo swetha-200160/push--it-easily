@@ -4,7 +4,7 @@ pipeline {
  
     environment {
 
-        BUILD_OUTPUT = "test_job"
+        BUILD_OUTPUT = "C:/ProgramData/Jenkins/test_job"
 
     }
  
@@ -52,9 +52,9 @@ pipeline {
 
                     if not exist "${env.test_job}" mkdir "${env.test_job}"
 
-                    copy /Y target\\*.jar "C:\\ProgramData\\Jenkins\\test_job"
+                    copy /Y target\\*.jar "C:/ProgramData/Jenkins/test_job"
 
-                    copy /Y target\\*.war  "C:\\ProgramData\\Jenkins\\test_job"
+                    copy /Y target\\*.war  "C:/ProgramData/Jenkins/test_job"
 
                     """
 
