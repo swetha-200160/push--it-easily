@@ -28,9 +28,10 @@ pipeline {
                     echo "Copying build files to ${env.BUILD_OUTPUT}"
                     // Adjust target path based on project structure (e.g., target/*.jar)
                     bat """
-                    if not exist "${env.BUILD_OUTPUT}" mkdir "${env.BUILD_OUTPUT}"
-                    copy /Y target\\*.jar "${env.BUILD_OUTPUT}\\"
-                    copy /Y target\\*.war "${env.BUILD_OUTPUT}\\"
+                    if not exist "C:/Users/swethasuresh/target" mkdir "C:/Users/swethasuresh/target"          
+                    copy /Y target\\*.jar  "C:/Users/swethasuresh/target\" target\*.war 
+                    copy /Y target\\*.war  "C:/Users/swethasuresh/target\" target\*.war 
+ 
                     """
                 }
             }
