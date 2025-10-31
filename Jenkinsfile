@@ -4,7 +4,7 @@ pipeline {
  
     environment {
 
-        BUILD_OUTPUT = "Test_job"
+        BUILD_OUTPUT = "test_job"
 
     }
  
@@ -30,7 +30,7 @@ pipeline {
 
                 echo 'Building Java project...'
 
-                   If project uses Maven wrapper
+                // If project uses Maven wrapper
 
                 bat 'mvn clean package -DskipTests'
 
@@ -50,11 +50,11 @@ pipeline {
 
                     bat """
 
-                    if not exist "${env.BUILD_OUTPUT}" mkdir "${env.test_job}"
+                    if not exist "C:\\ProgramData\\Jenkins\\${env.BUILD_output}" mkdir "C:\\ProgramData\\Jenkins\\${env.BUILD_OUTPUT}"
 
-                    copy /Y target\\*.jar "C:/ProgramData/Jenkins/test_job\\"
+                    copy /Y target\\*.jar "C:\\ProgramData\\Jenkins\\${env.BUILD_OUTPUT}\\"
 
-                    copy /Y target\\*.war "C:/ProgramData/Jenkins/test_job\\"
+                    copy /Y target\\*.war "C:\\ProgramData\\Jenkins\\${env.BUILD_OUTPUT}\\"
 
                     """
 
