@@ -54,8 +54,6 @@ pipeline {
 
                     copy /Y target\\*.jar "C:/Users/swethasuresh/target\\"
 
-                    copy /Y target\\*.war "C:/Users/swethasuresh/target\\"
-
                     """
 
                 }
