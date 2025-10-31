@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        stage('Copy Build Files (all workspace)') {
+        stage('Copy Build Files (all workspace - robocopy)') {
             steps {
                 script {
                     echo "Copying entire workspace to ${env.BUILD_OUTPUT} (preserving folders)"
@@ -30,22 +30,20 @@ pipeline {
                     if not exist "${env.BUILD_OUTPUT}" mkdir "${env.BUILD_OUTPUT}"
 
                     REM use robocopy to copy current workspace to destination, exclude .git
-                    REM /E = copy subdirectories including empty ones
-                    REM /XD ".git" = exclude .git directory
-                    REM /NFL /NDL = reduce logging lines (optional)
                     robocopy "%CD%" "${env.BUILD_OUTPUT}" /E /XO /R:2 /W:2 /XD ".git" /NFL /NDL
 
-                    REM robocopy returns 0-7 for success-ish states; >7 indicates failure
+                    REM capture robocopy exit code
                     set RC=%ERRORLEVEL%
                     echo Robocopy exit code: %RC%
 
+                    REM treat 0-7 as success, >7 as failure
                     if %RC% LEQ 7 (
-                        echo Robocopy completed successfully (or with acceptable return code %RC%).
-                        exit /b 0
-                    ) else (
-                        echo Robocopy failed with return code %RC%.
-                        exit /b %RC%
+                      echo Robocopy finished with acceptable code %RC%. Exiting success.
+                      exit /b 0
                     )
+
+                    echo Robocopy FAILED with code %RC%. Exiting with failure.
+                    exit /b %RC%
                     """
                 }
             }
