@@ -29,8 +29,8 @@ pipeline {
                     // Adjust target path based on project structure (e.g., target/*.jar)
                     bat """
                     if not exist "C:/Users/swethasuresh/target" mkdir "C:/Users/swethasuresh/target"          
-                    copy /Y target\\*.jar  "C:/Users/swethasuresh/target\" target\*.war 
-                    copy /Y target\\*.war  "C:/Users/swethasuresh/target\" target\*.war 
+                    copy /Y target\\*.jar  "C:/Users/swethasuresh/target\" target\\*.war 
+                    copy /Y target\\*.war  "C:/Users/swethasuresh/target\" target\\*.war 
  
                     """
                 }
