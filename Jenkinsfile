@@ -30,7 +30,7 @@ pipeline {
 
                 echo 'Building Java project...'
 
-                 If project uses Maven wrapper
+                   If project uses Maven wrapper
 
                 bat 'mvn clean package -DskipTests'
 
